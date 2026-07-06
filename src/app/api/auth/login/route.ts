@@ -6,7 +6,7 @@ export async function GET() {
     redirect_uri: process.env.HCA_REDIRECT_URI!,
     response_type: "code",
     
-scope: "email",
+scope: "email slack_id name profile",
   });
   console.log("Redirecting to Hack Club OAuth with params:", params.toString());
   return NextResponse.redirect(
