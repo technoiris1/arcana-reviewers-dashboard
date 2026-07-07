@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { base } from "@/lib/airtable";
+import { getSession } from "@/lib/session";
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
 
@@ -44,13 +45,15 @@ export async function GET(req: NextRequest) {
     }
   );
 
-  const user = await meResponse.json();
+const user = await meResponse.json();
 
-  const records = await base("arcana_R_admins")
-    .select({
-      filterByFormula: `{Admin_ID} = "${user.identity.slack_id}"`,
-    })
-    .firstPage();
+const slackId = user.identity.slack_id;
+
+const records = await base("arcana_R_admins")
+  .select({
+    filterByFormula: `{Admin_ID} = "${slackId}"`,
+  })
+  .firstPage();
 
 const allowed = records.length > 0;
 if (!allowed) {
@@ -61,5 +64,17 @@ else{
 }
   console.log(user);
 
-  return NextResponse.json(user);
+const session = await getSession();
+
+session.user = {
+  isLoggedIn: true,
+  allowed,
+  slackId,
+  name: `${user.identity.first_name} ${user.identity.last_name}`,
+  email: user.identity.primary_email,
+};
+
+await session.save();
+
+return NextResponse.redirect(new URL("/", req.url));
 }
