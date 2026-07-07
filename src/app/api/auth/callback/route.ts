@@ -29,7 +29,24 @@ export async function GET(req: NextRequest) {
 
   const tokens = await response.json();
 
-  console.log(tokens);
+  if (!response.ok) {
+    return NextResponse.json(tokens, {
+      status: response.status,
+    });
+  }
 
-  return NextResponse.json(tokens);
+  const meResponse = await fetch(
+    "https://auth.hackclub.com/api/v1/me",
+    {
+      headers: {
+        Authorization: `Bearer ${tokens.access_token}`,
+      },
+    }
+  );
+
+  const user = await meResponse.json();
+
+  console.log(user);
+
+  return NextResponse.json(user);
 }
