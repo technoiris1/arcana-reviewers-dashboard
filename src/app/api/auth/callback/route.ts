@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
+import { base } from "@/lib/airtable";
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
 
@@ -46,6 +46,19 @@ export async function GET(req: NextRequest) {
 
   const user = await meResponse.json();
 
+  const records = await base("arcana_R_admins")
+    .select({
+      filterByFormula: `{Admin_ID} = "${user.identity.slack_id}"`,
+    })
+    .firstPage();
+
+const allowed = records.length > 0;
+if (!allowed) {
+  console.log(`access denied, go away you scallywag`);
+  }
+else{
+  console.log("du bist gut genug")
+}
   console.log(user);
 
   return NextResponse.json(user);
