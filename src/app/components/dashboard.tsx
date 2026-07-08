@@ -1,5 +1,5 @@
 import type { UserSession } from "@/lib/session";
-
+import { Button } from "@/components/ui/button";
 export function Dashboard({ user }: { user: UserSession }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#efeded] px-6 font-mono">
@@ -21,6 +21,14 @@ export function Dashboard({ user }: { user: UserSession }) {
             <span className="font-semibold text-zinc-900">Slack ID:</span> {user.slackId}
           </p>
         </div>
+                <a
+          href="/api/auth/logout"
+          className="mt-10 inline-block"
+        >
+          <Button className="h-14 cursor-pointer rounded-xl bg-[#ec3750] px-12 text-lg font-semibold text-white transition-all  hover:bg-[#d92d48]  ">
+            Logout →
+          </Button>
+        </a>
       </div>
     </main>
   );
