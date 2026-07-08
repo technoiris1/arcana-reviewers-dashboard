@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { getReviews } from "@/lib/reviews";
 import { RefreshButton } from "@/app/components/refresh_button";
 import { ReviewButton } from "@/app/components/review_button";
+import LogoutButton from "@/app/components/logout_button";
 import {
   Table,
   TableBody,
@@ -31,11 +32,7 @@ export async function Dashboard({ user }: { user: UserSession }) {
 <div className="flex items-center gap-3">
   <RefreshButton />
 
-  <a href="/api/auth/logout">
-    <Button className="bg-[#ec3750] hover:bg-[#d92d48] cursor-pointer">
-      Logout
-    </Button>
-  </a>
+<LogoutButton />
 </div>
         </div>
 
