@@ -8,7 +8,6 @@ export async function GET() {
     
 scope: "email slack_id name profile",
   });
-  console.log("Redirecting to Hack Club OAuth with params:", params.toString());
   return NextResponse.redirect(
     `https://auth.hackclub.com/oauth/authorize?${params}`
   );

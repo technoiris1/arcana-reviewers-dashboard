@@ -56,13 +56,6 @@ const records = await base_auth("arcana_R_admins")
   .firstPage();
 
 const allowed = records.length > 0;
-if (!allowed) {
-  console.log(`access denied, go away you scallywag`);
-  }
-else{
-  console.log("du bist gut genug")
-}
-  console.log(user);
 
 const session = await getSession();
 
