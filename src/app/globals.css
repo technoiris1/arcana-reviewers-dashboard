@@ -128,3 +128,12 @@
     @apply font-sans;
   }
 }
+
+
+.success-toast {
+  background: white !important;
+  color: black !important;
+  border: 2px solid #000000 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+}

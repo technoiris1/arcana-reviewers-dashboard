@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { base } from "@/lib/airtable";
+import { base_auth } from "@/lib/airtable";
 import { getSession } from "@/lib/session";
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
@@ -49,7 +49,7 @@ const user = await meResponse.json();
 
 const slackId = user.identity.slack_id;
 
-const records = await base("arcana_R_admins")
+const records = await base_auth("arcana_R_admins")
   .select({
     filterByFormula: `{Admin_ID} = "${slackId}"`,
   })

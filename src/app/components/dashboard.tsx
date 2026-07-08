@@ -1,34 +1,91 @@
 import type { UserSession } from "@/lib/session";
 import { Button } from "@/components/ui/button";
-export function Dashboard({ user }: { user: UserSession }) {
+import { getReviews } from "@/lib/reviews";
+import { RefreshButton } from "@/app/components/refresh_button";
+import { ReviewButton } from "@/app/components/review_button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export async function Dashboard({ user }: { user: UserSession }) {
+  const reviews = await getReviews();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[#efeded] px-6 font-mono">
-      <div className="max-w-3xl text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight text-zinc-900 md:text-7xl">
-          Welcome, {user.name}
-        </h1>
+    <main className="min-h-screen bg-[#efeded] p-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-zinc-900">
+              Arcana Priority Reviews
+            </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-zinc-600 md:text-xl">
-          You&apos;re signed in and viewing the Arcana Priority Reviews dashboard.
-        </p>
+            <p className="mt-2 text-zinc-600">
+              heyo {user.name}!
+            </p>
+          </div>
+<div className="flex items-center gap-3">
+  <RefreshButton />
 
-        <div className="mx-auto mt-10 grid gap-3 text-sm leading-6 text-zinc-700 md:text-base">
-          <p>
-            <span className="font-semibold text-zinc-900">Email:</span> {user.email}
-          </p>
-
-          <p>
-            <span className="font-semibold text-zinc-900">Slack ID:</span> {user.slackId}
-          </p>
+  <a href="/api/auth/logout">
+    <Button className="bg-[#ec3750] hover:bg-[#d92d48] cursor-pointer">
+      Logout
+    </Button>
+  </a>
+</div>
         </div>
-                <a
-          href="/api/auth/logout"
-          className="mt-10 inline-block"
-        >
-          <Button className="h-14 cursor-pointer rounded-xl bg-[#ec3750] px-12 text-lg font-semibold text-white transition-all  hover:bg-[#d92d48]  ">
-            Logout →
-          </Button>
-        </a>
+
+        <div className="overflow-hidden rounded-xl border bg-white shadow">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-20">#</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Slack ID</TableHead>
+                <TableHead>Project</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {reviews.map((review: any, index: number) => (
+                <TableRow key={review.id}>
+                  <TableCell>{index + 1}</TableCell>
+
+                  <TableCell className="font-medium">
+                    {review.Name}
+                  </TableCell>
+
+                  <TableCell className="font-mono text-sm">
+                    {review["Slack ID"]}
+                  </TableCell>
+
+                  <TableCell>
+                    <a
+                      href={review["Project Link"]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Open Project →
+                    </a>
+                  </TableCell>
+                  <TableCell>
+  <ReviewButton id={review.id} />
+</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <p className="mt-4 text-sm text-zinc-500">
+          {reviews.length} pending reviews
+        </p>
       </div>
     </main>
   );
