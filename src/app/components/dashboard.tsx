@@ -1,6 +1,7 @@
 import type { UserSession } from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { getReviews } from "@/lib/reviews";
+import { getReviewedReviews } from "@/lib/reviews";
 import { RefreshButton } from "@/app/components/refresh_button";
 import { ReviewButton } from "@/app/components/review_button";
 import LogoutButton from "@/app/components/logout_button";
@@ -15,7 +16,7 @@ import {
 
 export async function Dashboard({ user }: { user: UserSession }) {
   const reviews = await getReviews();
-
+  const reviewedReviews = await getReviewedReviews();
   return (
     <main className="min-h-screen bg-[#efeded] p-8">
       <div className="mx-auto max-w-7xl">
@@ -83,6 +84,63 @@ export async function Dashboard({ user }: { user: UserSession }) {
         <p className="mt-4 text-sm text-zinc-500">
           {reviews.length} pending reviews
         </p>
+      
+      {/* reivewed reviews table */}
+      
+<div className="mt-10 rounded-xl border bg-white shadow">
+  <div className="border-b px-6 py-5">
+    <h2 className="text-2xl font-bold tracking-tight">
+      Reviewed Projects
+    </h2>
+    <p className="mt-1 text-sm text-muted-foreground">
+      Submissions that have been marked as reviewed.
+    </p>
+  </div>
+
+  <div className="overflow-hidden">
+    <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-20">#</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Slack ID</TableHead>
+                <TableHead>Project</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {reviewedReviews.map((review: any, index: number) => (
+                <TableRow key={review.id}>
+                  <TableCell>{index + 1}</TableCell>
+
+                  <TableCell className="font-medium">
+                    {review.Name}
+                  </TableCell>
+
+                  <TableCell className="font-mono text-sm">
+                    {review["Slack ID"]}
+                  </TableCell>
+
+                  <TableCell>
+                    <a
+                      href={review["Project Link"]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Open Project →
+                    </a>
+                  </TableCell>
+                  <TableCell>
+            <p>Reviewed</p>
+          </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        </div>
       </div>
     </main>
   );

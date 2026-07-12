@@ -6,8 +6,21 @@ export async function getReviews() {
     filterByFormula: `{Review Status} = "Pending"`,
     })
     .all();
+  
 
   return records.map((record) => ({
+    id: record.id,
+    ...record.fields,
+  }));
+}
+
+export async function getReviewedReviews(){
+    const records = await base("Arcana Priority Reviews")
+    .select({
+      filterByFormula: `{Review Status} = "Reviewed"`,
+    })
+    .all();
+      return records.map((record) => ({
     id: record.id,
     ...record.fields,
   }));
