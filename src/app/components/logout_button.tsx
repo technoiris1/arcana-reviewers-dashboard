@@ -35,13 +35,13 @@ export default function LogoutButton() {
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
 
           <AlertDialogAction
             onClick={() => {
               window.location.href = "/api/auth/logout";
             }}
-            className="bg-[#ec3750] hover:bg-[#d92d48]"
+            className="bg-[#ec3750] hover:bg-[#d92d48] cursor-pointer"
           >
             Logout
           </AlertDialogAction>
